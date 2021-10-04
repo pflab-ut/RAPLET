@@ -1,11 +1,21 @@
 SHELL=/bin/bash
 C_DIR=$(shell pwd)
 
-lhook.so: hook_libroscpp.cpp demangler
-	g++ -g -Wall -shared -fPIC -pthread -ldl -I/opt/ros/melodic/include -I$(C_DIR)/devel/include hook_libroscpp.cpp -o lhook.so
+all: lhook.so
+
+log_file:
+	mkdir -p ~/.ros/raplet
+
+lhook.so: hook_libroscpp.cpp demangler log_file
+	g++ -g -Wall -shared -fPIC -pthread -ldl -I/opt/ros/noetic/include -I$(C_DIR)/devel/include hook_libroscpp.cpp -o lhook.so
 
 demangler: demangler.cpp
 	g++ -o demangler demangler.cpp
 
-clean_pl_data:
+clean_log:
 	rm ~/.ros/raplet/log*
+
+clean:
+	rm *.o demangler lhook.so
+
+.PHONY: clean_pl_data clean all

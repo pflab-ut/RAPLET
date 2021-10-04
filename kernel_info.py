@@ -2,6 +2,7 @@ from __future__ import print_function
 from bcc import BPF
 from time import strftime, time
 from ctypes import c_ulong
+import os
 
 
 from ki_text import *
@@ -124,6 +125,7 @@ while 1:
         bpf_get_tid["bytes"].clear()
 
     except KeyboardInterrupt:
+        os.makedirs("data", exist_ok=True)
         for pid, vals in ros_app_pids_delta.items():
             with open("data/qlat" +str(ros_app_pid_tgid[pid]) + "-" + str(pid) + ".txt", "w") as f:
                 f.write("\n".join(map(lambda x: "Q " + str(x), vals)))
